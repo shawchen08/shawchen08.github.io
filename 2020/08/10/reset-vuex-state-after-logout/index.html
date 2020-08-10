@@ -98,24 +98,24 @@
 
 
 
-  <meta name="description" content="vue 项目退出登录后清理 vuex 状态 vuex 目录结构及关键内容1234567src/  store/    getters.js    index.js    modules/    	user.js        ... 12345678910111213141516171819202122232425262728293031323334353637383940414243444546">
+  <meta name="description" content="vue 项目中退出登录后清理 vuex 状态的方法 vuex 目录结构及关键内容1234567src/  store/    getters.js    index.js    modules/    	user.js        ... 1234567891011121314151617181920212223242526272829303132333435363738394041424344">
 <meta property="og:type" content="article">
-<meta property="og:title" content="vue项目退出登录后清理vuex状态">
-<meta property="og:url" content="https://shawchen08.github.io/2020/08/10/ue-项目退出登录后清理-vuex-状态/index.html">
+<meta property="og:title" content="reset vuex state after logout">
+<meta property="og:url" content="https://shawchen08.github.io/2020/08/10/reset-vuex-state-after-logout/index.html">
 <meta property="og:site_name" content="小丞的博客">
-<meta property="og:description" content="vue 项目退出登录后清理 vuex 状态 vuex 目录结构及关键内容1234567src/  store/    getters.js    index.js    modules/    	user.js        ... 12345678910111213141516171819202122232425262728293031323334353637383940414243444546">
+<meta property="og:description" content="vue 项目中退出登录后清理 vuex 状态的方法 vuex 目录结构及关键内容1234567src/  store/    getters.js    index.js    modules/    	user.js        ... 1234567891011121314151617181920212223242526272829303132333435363738394041424344">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-08-10T05:03:43.710Z">
+<meta property="og:updated_time" content="2020-08-10T05:15:26.813Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="vue项目退出登录后清理vuex状态">
-<meta name="twitter:description" content="vue 项目退出登录后清理 vuex 状态 vuex 目录结构及关键内容1234567src/  store/    getters.js    index.js    modules/    	user.js        ... 12345678910111213141516171819202122232425262728293031323334353637383940414243444546">
+<meta name="twitter:title" content="reset vuex state after logout">
+<meta name="twitter:description" content="vue 项目中退出登录后清理 vuex 状态的方法 vuex 目录结构及关键内容1234567src/  store/    getters.js    index.js    modules/    	user.js        ... 1234567891011121314151617181920212223242526272829303132333435363738394041424344">
 
 
 
 
 
 
-  <link rel="canonical" href="https://shawchen08.github.io/2020/08/10/ue-项目退出登录后清理-vuex-状态/">
+  <link rel="canonical" href="https://shawchen08.github.io/2020/08/10/reset-vuex-state-after-logout/">
 
 
 
@@ -125,7 +125,7 @@
   };
 </script>
 
-  <title>vue项目退出登录后清理vuex状态 | 小丞的博客</title>
+  <title>reset vuex state after logout | 小丞的博客</title>
   
 
 
@@ -324,7 +324,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://shawchen08.github.io/2020/08/10/ue-项目退出登录后清理-vuex-状态/">
+    <link itemprop="mainEntityOfPage" href="https://shawchen08.github.io/2020/08/10/reset-vuex-state-after-logout/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="shawchen08">
@@ -341,7 +341,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">vue项目退出登录后清理vuex状态
+          <h1 class="post-title" itemprop="name headline">reset vuex state after logout
 
               
             
@@ -367,7 +367,7 @@
                 
               
 
-              <time title="创建时间：2020-08-10 12:34:13 / 修改时间：13:03:43" itemprop="dateCreated datePublished" datetime="2020-08-10T12:34:13+08:00">2020-08-10</time>
+              <time title="创建时间：2020-08-10 13:14:30 / 修改时间：13:15:26" itemprop="dateCreated datePublished" datetime="2020-08-10T13:14:30+08:00">2020-08-10</time>
             
 
             
@@ -431,7 +431,7 @@
       
 
       
-        <p>vue 项目退出登录后清理 vuex 状态</p>
+        <p>vue 项目中退出登录后清理 vuex 状态的方法</p>
 <p>vuex 目录结构及关键内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">src/</span><br><span class="line">  store/</span><br><span class="line">    getters.js</span><br><span class="line">    index.js</span><br><span class="line">    modules/</span><br><span class="line">    	user.js</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/store/index.js</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">const</span> modulesFiles = <span class="built_in">require</span>.context(<span class="string">'./modules'</span>, <span class="literal">true</span>, /\.js$/)</span><br><span class="line"><span class="keyword">const</span> _initState = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> modules = modulesFiles.keys().reduce(<span class="function">(<span class="params">modules, modulePath</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> moduleName = modulePath.replace(<span class="regexp">/^\.\/(.*)\.\w+$/</span>, <span class="string">'$1'</span>)</span><br><span class="line">  <span class="keyword">const</span> value = modulesFiles(modulePath)</span><br><span class="line">  modules[moduleName] = value.default</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 备份初始状态，用于重置</span></span><br><span class="line">  _initState[moduleName] = deepClone(value.default.state) <span class="comment">// 深克隆，自己实现或直接用 lodash 的</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> modules</span><br><span class="line">&#125;, &#123;&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">  state: &#123;</span><br><span class="line">    _initState</span><br><span class="line">  &#125;,</span><br><span class="line">  modules,</span><br><span class="line">  getters,</span><br><span class="line">  mutations: &#123;</span><br><span class="line">    <span class="comment">// 定义全局的清理方法</span></span><br><span class="line">    RESET_ALL_STATE(state, payload) &#123;</span><br><span class="line">      <span class="keyword">const</span> initState = deepClone(state._initState)</span><br><span class="line">      <span class="built_in">Object</span>.keys(state).forEach(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (item !== <span class="string">'_initState'</span>) &#123;</span><br><span class="line">          state[item] = initState[item]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="comment">// src/store/modules/user.js</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"><span class="keyword">const</span> state = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mutations = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> actions = &#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="comment">// user logout</span></span><br><span class="line">  logout(&#123; commit, state, dispatch &#125;) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">      ...</span><br><span class="line">      <span class="comment">// 清理所有状态</span></span><br><span class="line">      commit(<span class="string">'RESET_ALL_STATE'</span>, <span class="literal">null</span>, &#123; <span class="attr">root</span>: <span class="literal">true</span> &#125;)</span><br><span class="line">      resolve()</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;,</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  namespaced: <span class="literal">true</span>,</span><br><span class="line">  state,</span><br><span class="line">  mutations,</span><br><span class="line">  actions</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
