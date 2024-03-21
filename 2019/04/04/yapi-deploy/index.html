@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="5UV6V7p92xwftqZ9uQI6zMTsDbUBA1nJqFew4YKX_T8">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"shawchen08.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="环境准备 nodejs（7.6+) mongodb（2.6+） git  nodejs 与 git1sudo apt install nodejs npm git  mongodb安装 MongoDB 导入公钥  Ubuntu 软件包管理器 apt（高级软件包工具）需要软件分销商的 GPG 密钥来确保软件包的一致性和真实性。 运行此命令将 MongoDB 密钥导入到您的服务器。 1sudo apt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="yapi 本地部署（基于 ubuntu 18.04）">
+<meta property="og:url" content="https://shawchen08.github.io/2019/04/04/yapi-deploy/index.html">
+<meta property="og:site_name" content="小丞的博客">
+<meta property="og:description" content="环境准备 nodejs（7.6+) mongodb（2.6+） git  nodejs 与 git1sudo apt install nodejs npm git  mongodb安装 MongoDB 导入公钥  Ubuntu 软件包管理器 apt（高级软件包工具）需要软件分销商的 GPG 密钥来确保软件包的一致性和真实性。 运行此命令将 MongoDB 密钥导入到您的服务器。 1sudo apt">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shawchen08.github.io/2019/04/04/yapi-deploy/config.png">
+<meta property="article:published_time" content="2019-04-04T10:47:03.000Z">
+<meta property="article:modified_time" content="2024-03-21T08:25:13.996Z">
+<meta property="article:author" content="shawchen08">
+<meta property="article:tag" content="ubuntu">
+<meta property="article:tag" content="yapi">
+<meta property="article:tag" content="mock">
+<meta property="article:tag" content="MongoDB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shawchen08.github.io/2019/04/04/yapi-deploy/config.png">
+
+
+<link rel="canonical" href="https://shawchen08.github.io/2019/04/04/yapi-deploy/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://shawchen08.github.io/2019/04/04/yapi-deploy/","path":"2019/04/04/yapi-deploy/","title":"yapi 本地部署（基于 ubuntu 18.04）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>yapi 本地部署（基于 ubuntu 18.04） | 小丞的博客</title>
+  
+
+
+
+
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ljoeylkcfb");
+</script>
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小丞的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="nav-number">1.</span> <span class="nav-text">环境准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nodejs-%E4%B8%8E-git"><span class="nav-number">1.1.</span> <span class="nav-text">nodejs 与 git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mongodb"><span class="nav-number">1.2.</span> <span class="nav-text">mongodb</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-MongoDB"><span class="nav-number">1.2.1.</span> <span class="nav-text">安装 MongoDB</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-MongoDB-%E7%94%A8%E6%88%B7%E5%90%8D%E5%92%8C%E5%AF%86%E7%A0%81"><span class="nav-number">1.2.2.</span> <span class="nav-text">配置 MongoDB 用户名和密码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MongoDB-%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB"><span class="nav-number">1.2.3.</span> <span class="nav-text">MongoDB 数据迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%87%E4%BB%BD"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">备份</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%81%A2%E5%A4%8D"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">恢复</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yapi"><span class="nav-number">2.</span> <span class="nav-text">yapi</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80-%E5%8F%AF%E8%A7%86%E5%8C%96%E9%83%A8%E7%BD%B2"><span class="nav-number">2.1.</span> <span class="nav-text">方式一. 可视化部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C-%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%83%A8%E7%BD%B2"><span class="nav-number">2.2.</span> <span class="nav-text">方式二. 命令行部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pm2-%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4"><span class="nav-number">2.3.</span> <span class="nav-text">pm2 进程守护</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pm2-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">2.3.1.</span> <span class="nav-text">pm2 常用命令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shawchen08</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shawchen08" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shawchen08" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shawchen08.github.io/2019/04/04/yapi-deploy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shawchen08">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小丞的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="yapi 本地部署（基于 ubuntu 18.04） | 小丞的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          yapi 本地部署（基于 ubuntu 18.04）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-04-04 18:47:03" itemprop="dateCreated datePublished" datetime="2019-04-04T18:47:03+08:00">2019-04-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-21 16:25:13" itemprop="dateModified" datetime="2024-03-21T16:25:13+08:00">2024-03-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/frontend/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><ul>
+<li>nodejs（7.6+)</li>
+<li>mongodb（2.6+）</li>
+<li>git</li>
+</ul>
+<h3 id="nodejs-与-git"><a href="#nodejs-与-git" class="headerlink" title="nodejs 与 git"></a>nodejs 与 git</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install nodejs npm git</span><br></pre></td></tr></table></figure>
+
+<h3 id="mongodb"><a href="#mongodb" class="headerlink" title="mongodb"></a>mongodb</h3><h4 id="安装-MongoDB"><a href="#安装-MongoDB" class="headerlink" title="安装 MongoDB"></a>安装 MongoDB</h4><ol>
+<li>导入公钥</li>
+</ol>
+<p>Ubuntu 软件包管理器 apt（高级软件包工具）需要软件分销商的 GPG 密钥来确保软件包的一致性和真实性。 运行此命令将 MongoDB 密钥导入到您的服务器。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>创建源列表文件</li>
+</ol>
+<p>使用以下命令在 <code>/etc/apt/sources.list.d/</code> 中创建一个 MongoDB 列表文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse&quot; | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>安装 MongoDB</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install -y mongodb-org</span><br></pre></td></tr></table></figure>
+
+<p>MongoDB apt 安装程序自动为 Systemd 创建了一个 mongod.service 文件，因此不需要再手动创建它。</p>
+<p>启动 MongoDB 并将其添加为在启动时启动的服务：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start mongod</span><br><span class="line">systemctl enable mongod</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置-MongoDB-用户名和密码"><a href="#配置-MongoDB-用户名和密码" class="headerlink" title="配置 MongoDB 用户名和密码"></a>配置 MongoDB 用户名和密码</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mongo</span><br><span class="line"></span><br><span class="line"># 进入 MongoDB shell 后，切换到数据库管理员</span><br><span class="line">use admin</span><br><span class="line"># 创建 root 用户</span><br><span class="line">db.createUser(&#123;user:&quot;admin&quot;, pwd:&quot;admin123&quot;, roles:[&#123;role:&quot;root&quot;, db:&quot;admin&quot;&#125;]&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 切换到数据库 yapi</span><br><span class="line">use yapi</span><br><span class="line"># 创建 yapi 管理员用户</span><br><span class="line">db.createUser(&#123;user:&quot;yapiAdmin&quot;, pwd:&quot;yapi123&quot;, roles:[&#123;role:&quot;dbOwner&quot;, db:&quot;yapi&quot;&#125;]&#125;)</span><br><span class="line"></span><br><span class="line"># 退出</span><br><span class="line">exit</span><br><span class="line"></span><br><span class="line"># 重新启动MongoDB并连接创建的用户</span><br><span class="line">sudo service mongod restart</span><br></pre></td></tr></table></figure>
+
+<h4 id="MongoDB-数据迁移"><a href="#MongoDB-数据迁移" class="headerlink" title="MongoDB 数据迁移"></a>MongoDB 数据迁移</h4><h5 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongodump -h dbhost  -d dbname -o dbdirectory</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>-h</code>: mongodb 所在服务器地址，例如 <code>127.0.0.1</code>，也可以指定端口 <code>127.0.0.1:27017</code></li>
+<li><code>-d</code>: 需要备份的数据库名称，例如：<code>yapi</code></li>
+<li><code>-o</code>: 备份的数据存放的位置，例如：<code>/home/bak</code></li>
+<li><code>-u</code>: 用户名称，使用权限验证的 mongodb 服务，需要指明导出账号</li>
+<li><code>-p</code>：用户密码，使用权限验证的 mongodb 服务，需要指明导出账号密码</li>
+</ul>
+<h5 id="恢复"><a href="#恢复" class="headerlink" title="恢复"></a>恢复</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongorestore -h dbhost -d dbname --drop &lt;path&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>-h</code>: mongodb 所在服务器地址</li>
+<li><code>-d</code>: 需要恢复备份的数据库名称，例如：<code>yapi</code>，可以跟原来备份的数据库名称不一样</li>
+<li><code>--drop</code>: 加上这个参数的时候，会在恢复数据之前删除当前数据</li>
+<li><code>&lt;path&gt;</code>: 备份数据所在位置，例如：<code>/home/bak/yapi</code></li>
+<li><code>--dir</code>: 指定备份的目录，你不能同时指定 <code>&lt;path&gt;</code> 和 <code>--dir</code> 选项</li>
+</ul>
+<h2 id="yapi"><a href="#yapi" class="headerlink" title="yapi"></a>yapi</h2><h3 id="方式一-可视化部署"><a href="#方式一-可视化部署" class="headerlink" title="方式一. 可视化部署"></a>方式一. 可视化部署</h3><p>执行 yapi server 启动可视化部署程序，输入相应的配置和点击开始部署，就能完成整个网站的部署。部署完成之后，可按照提示信息，执行 node&#x2F;{网站路径&#x2F;server&#x2F;app.js} 启动服务器。在浏览器打开指定 url, 点击登录输入您刚才设置的管理员邮箱，默认密码(ymfe.org) 登录系统（默认密码可在个人中心修改）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -g yapi-cli --registry https://registry.npm.taobao.org</span><br><span class="line">yapi server</span><br></pre></td></tr></table></figure>
+
+<p><strong>经测试，ubuntu 18.04 中 9090 端口被占用，目前需在源码中修改端口：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注：路径可能有所不同，下面的是我机器上的</span></span><br><span class="line"><span class="comment">// /usr/local/lib/node_modules/yapi-cli/src/commands/server.js</span></span><br><span class="line"><span class="comment">// line 91</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"><span class="comment">// app.listen(9090)</span></span><br><span class="line">app.<span class="title function_">listen</span>(argv.<span class="property">port</span> || <span class="number">9090</span>) <span class="comment">// 支持 yapi server --port 9290</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h3 id="方式二-命令行部署"><a href="#方式二-命令行部署" class="headerlink" title="方式二. 命令行部署"></a>方式二. 命令行部署</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mkdir yapi</span><br><span class="line">cd yapi</span><br><span class="line">git clone --depth=1 https://github.com/YMFE/yapi.git vendors</span><br><span class="line">cp vendors/config_example.json ./config.json // 复制完成后请修改相关配置</span><br><span class="line">cd vendors</span><br><span class="line">npm install --production --registry https://registry.npm.taobao.org</span><br><span class="line"></span><br><span class="line"># 在此之前请先修改配置 config.json</span><br><span class="line">npm run install-server // 安装程序会初始化数据库索引和管理员账号，管理员账号名可在 config.json 配置</span><br><span class="line">node server/app.js // 启动服务器后，请访问 127.0.0.1:&#123;config.json配置的端口&#125;，初次运行会有个编译的过程，请耐心等候</span><br></pre></td></tr></table></figure>
+
+<p><strong>请在启动前进行配置</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim config.json</span><br></pre></td></tr></table></figure>
+
+<img src="/2019/04/04/yapi-deploy/config.png" class="" title="config">
+
+<h3 id="pm2-进程守护"><a href="#pm2-进程守护" class="headerlink" title="pm2 进程守护"></a>pm2 进程守护</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm install pm2@latest -g</span><br><span class="line"></span><br><span class="line"># 注意目录 app.js 的目录，pm2 start `real_path`/app.js</span><br><span class="line">pm2 start ./server/app.js</span><br></pre></td></tr></table></figure>
+
+<h4 id="pm2-常用命令"><a href="#pm2-常用命令" class="headerlink" title="pm2 常用命令"></a>pm2 常用命令</h4><ul>
+<li>开机自启动：<code>pm2 startup</code>，然后按提示操作</li>
+<li>取消开机自启动：<code>pm2 unstartup</code>，然后按提示操作</li>
+<li>保存当前应用：<code>pm2 save</code></li>
+<li>清理已保存的应用：<code>pm2 cleardump</code></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://yapi.ymfe.org/devops/index.html">https://yapi.ymfe.org/devops/index.html</a><br><a href="https://www.linuxidc.com/Linux/2018-05/152253.htm">https://www.linuxidc.com/Linux/2018-05/152253.htm</a><br><a href="https://pm2.io/doc/en/runtime/guide/startup-hook/">https://pm2.io/doc/en/runtime/guide/startup-hook/</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ubuntu/" rel="tag"># ubuntu</a>
+              <a href="/tags/yapi/" rel="tag"># yapi</a>
+              <a href="/tags/mock/" rel="tag"># mock</a>
+              <a href="/tags/MongoDB/" rel="tag"># MongoDB</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/04/03/vue-ssr-dom-error/" rel="prev" title="定位 vue ssr DOM 不匹配的报错">
+                  <i class="fa fa-angle-left"></i> 定位 vue ssr DOM 不匹配的报错
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/04/08/git-commands/" rel="next" title="git 常用命令">
+                  git 常用命令 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">shawchen08</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

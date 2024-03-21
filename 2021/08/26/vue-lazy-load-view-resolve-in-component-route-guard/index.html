@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="5UV6V7p92xwftqZ9uQI6zMTsDbUBA1nJqFew4YKX_T8">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"shawchen08.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="为了在异步组件加载过程中显示加载中状态，引入了 LazyLoadView，但这种方案直接导致了组件内的导航守卫 beforeRouteEnter&#x2F;beforeRouteLeave 失效，下面就是该问题的一种尝试解决方案： 创建 eventbus123456&#x2F;&#x2F; src&#x2F;utils&#x2F;eventbus.jsimport Vue from &#x27;vue&#x27;const eventbus &#x3D;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LazyLoadView 导致组件内导航守卫失效问题解决方案">
+<meta property="og:url" content="https://shawchen08.github.io/2021/08/26/vue-lazy-load-view-resolve-in-component-route-guard/index.html">
+<meta property="og:site_name" content="小丞的博客">
+<meta property="og:description" content="为了在异步组件加载过程中显示加载中状态，引入了 LazyLoadView，但这种方案直接导致了组件内的导航守卫 beforeRouteEnter&#x2F;beforeRouteLeave 失效，下面就是该问题的一种尝试解决方案： 创建 eventbus123456&#x2F;&#x2F; src&#x2F;utils&#x2F;eventbus.jsimport Vue from &#x27;vue&#x27;const eventbus &#x3D;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-26T03:20:32.000Z">
+<meta property="article:modified_time" content="2024-03-21T08:25:13.994Z">
+<meta property="article:author" content="shawchen08">
+<meta property="article:tag" content="vue">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://shawchen08.github.io/2021/08/26/vue-lazy-load-view-resolve-in-component-route-guard/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://shawchen08.github.io/2021/08/26/vue-lazy-load-view-resolve-in-component-route-guard/","path":"2021/08/26/vue-lazy-load-view-resolve-in-component-route-guard/","title":"LazyLoadView 导致组件内导航守卫失效问题解决方案"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>LazyLoadView 导致组件内导航守卫失效问题解决方案 | 小丞的博客</title>
+  
+
+
+
+
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ljoeylkcfb");
+</script>
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小丞的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-eventbus"><span class="nav-number">1.</span> <span class="nav-text">创建 eventbus</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AF%BC%E8%88%AA%E5%AE%88%E5%8D%AB%EF%BC%88%E4%B9%9F%E5%B0%B1%E6%98%AF%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">自定义导航守卫（也就是自定义事件）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%85%A8%E5%B1%80%E5%AE%88%E5%8D%AB%E8%A7%A6%E5%8F%91%E4%BA%8B%E4%BB%B6%EF%BC%8C%E6%A8%A1%E6%8B%9F%E7%BB%84%E4%BB%B6%E5%86%85%E5%AF%BC%E8%88%AA%E5%AE%88%E5%8D%AB"><span class="nav-number">3.</span> <span class="nav-text">通过全局守卫触发事件，模拟组件内导航守卫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E5%86%85%E9%83%A8%E7%9B%91%E5%90%AC%E7%9B%B8%E5%BA%94%E7%9A%84%E4%BA%8B%E4%BB%B6%EF%BC%8C%E6%A8%A1%E6%8B%9F%E7%BB%84%E4%BB%B6%E5%86%85%E5%AF%BC%E8%88%AA%E5%AE%88%E5%8D%AB"><span class="nav-number">4.</span> <span class="nav-text">组件内部监听相应的事件，模拟组件内导航守卫</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shawchen08</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shawchen08" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shawchen08" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shawchen08.github.io/2021/08/26/vue-lazy-load-view-resolve-in-component-route-guard/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shawchen08">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小丞的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="LazyLoadView 导致组件内导航守卫失效问题解决方案 | 小丞的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LazyLoadView 导致组件内导航守卫失效问题解决方案
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-08-26 11:20:32" itemprop="dateCreated datePublished" datetime="2021-08-26T11:20:32+08:00">2021-08-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-21 16:25:13" itemprop="dateModified" datetime="2024-03-21T16:25:13+08:00">2024-03-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/frontend/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>为了在异步组件加载过程中显示加载中状态，引入了 <a href="/2021/08/26/vue-lazy-load-view/">LazyLoadView</a>，但这种方案直接导致了组件内的导航守卫 <code>beforeRouteEnter/beforeRouteLeave</code> 失效，下面就是该问题的一种尝试解决方案：</p>
+<h3 id="创建-eventbus"><a href="#创建-eventbus" class="headerlink" title="创建 eventbus"></a>创建 eventbus</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/utils/eventbus.js</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Vue</span> <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> eventbus = <span class="keyword">new</span> <span class="title class_">Vue</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> eventbus</span><br></pre></td></tr></table></figure>
+
+<p>为了方便使用，我们将 <code>eventbus</code> 注册在 <code>Vue</code> 的原型上</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/main.js</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Vue</span> <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> eventbus <span class="keyword">from</span> <span class="string">&#x27;@/utils/eventbus&#x27;</span></span><br><span class="line"><span class="title class_">Vue</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">$eventbus</span> = eventbus</span><br></pre></td></tr></table></figure>
+
+<h3 id="自定义导航守卫（也就是自定义事件）"><a href="#自定义导航守卫（也就是自定义事件）" class="headerlink" title="自定义导航守卫（也就是自定义事件）"></a>自定义导航守卫（也就是自定义事件）</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/routeGuard.js</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 由于 lazy-load-view 的影响导致组件内导航守卫不触发，在此通过 eventbus 实现自定义导航守卫</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> <span class="variable">shawchen08</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> eventbus <span class="keyword">from</span> <span class="string">&#x27;@/utils/eventbus&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Note: 在需要监听 beforeRouteEnter 的组件中，需要在 created 中执行</span></span><br><span class="line"><span class="comment">// eventbus.$emit(`before$&#123;route&#125;Enter`, to, from) 原因在于 afterEach 先于组件的生命周期钩子</span></span><br><span class="line"><span class="comment">// 执行，那么首次进入就不会未执行 beforeRouteEnter 的回调逻辑，因此需手动触发一次</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 需要 beforeRouteEnter 的路由</span></span><br><span class="line"><span class="keyword">const</span> routeEnterList = [<span class="string">&#x27;RouteA&#x27;</span>, <span class="string">&#x27;RouteB&#x27;</span>]</span><br><span class="line"><span class="keyword">const</span> beforeRouteEnter = &#123;&#125;</span><br><span class="line"></span><br><span class="line">routeEnterList.<span class="title function_">forEach</span>(<span class="function"><span class="params">route</span> =&gt;</span> &#123;</span><br><span class="line">  beforeRouteEnter[route] = <span class="function">(<span class="params">to, <span class="keyword">from</span></span>) =&gt;</span> &#123;</span><br><span class="line">    eventbus.$emit(<span class="string">`before<span class="subst">$&#123;route&#125;</span>Enter`</span>, to, <span class="keyword">from</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 需要 beforeRouteLeave 的路由</span></span><br><span class="line"><span class="keyword">const</span> routeLeaveList = [<span class="string">&#x27;RouteC&#x27;</span>, <span class="string">&#x27;RouteD&#x27;</span>, <span class="string">&#x27;RouteE&#x27;</span>]</span><br><span class="line"><span class="keyword">const</span> beforeRouteLeave = &#123;&#125;</span><br><span class="line"></span><br><span class="line">routeLeaveList.<span class="title function_">forEach</span>(<span class="function"><span class="params">route</span> =&gt;</span> &#123;</span><br><span class="line">  beforeRouteLeave[route] = <span class="function">(<span class="params">to, <span class="keyword">from</span>, next</span>) =&gt;</span> &#123;</span><br><span class="line">    eventbus.$emit(<span class="string">`before<span class="subst">$&#123;route&#125;</span>Leave`</span>, to, <span class="keyword">from</span>, next)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> &#123; beforeRouteEnter, beforeRouteLeave &#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们把需要使用组件内导航守卫 <code>beforeRouteEnter</code> 和 <code>beforeRouteLeave</code> 的组件名（<strong>路由名与组件名一致</strong>，<a href="/2021/08/27/vue-check-routeame-and-pagename/">可以通过此脚本检测</a>）分别添加到上面文件对应的数组 <code>routeEnterList</code> 和 <code>routeLeaveList</code> 中</p>
+<h3 id="通过全局守卫触发事件，模拟组件内导航守卫"><a href="#通过全局守卫触发事件，模拟组件内导航守卫" class="headerlink" title="通过全局守卫触发事件，模拟组件内导航守卫"></a>通过全局守卫触发事件，模拟组件内导航守卫</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/permission.js</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Vue</span> <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> router <span class="keyword">from</span> <span class="string">&#x27;./router&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; beforeRouteEnter, beforeRouteLeave &#125; <span class="keyword">from</span> <span class="string">&#x27;@/routeGuard&#x27;</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ! Note: 由于 beforeEach 中有很多权限控制逻辑，</span></span><br><span class="line"><span class="comment">// ! 为了简单处理，我们在 beforeResolve 触发自定义 beforeRouteLeave 事件</span></span><br><span class="line">router.<span class="title function_">beforeResolve</span>(<span class="function">(<span class="params">to, <span class="keyword">from</span>, next</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (beforeRouteLeave[<span class="keyword">from</span>.<span class="property">name</span>]) &#123;</span><br><span class="line">    <span class="keyword">return</span> beforeRouteLeave[<span class="keyword">from</span>.<span class="property">name</span>](to, <span class="keyword">from</span>, next)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">next</span>()</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">router.<span class="title function_">afterEach</span>(<span class="function">(<span class="params">to, <span class="keyword">from</span></span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 记录 to 和 from，组件内需要使用</span></span><br><span class="line">  <span class="title class_">Vue</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">$beforeRouteEnterParams</span> = &#123; to, <span class="keyword">from</span> &#125;</span><br><span class="line">  <span class="keyword">if</span> (beforeRouteEnter[to.<span class="property">name</span>]) &#123;</span><br><span class="line">    beforeRouteEnter[to.<span class="property">name</span>](to, <span class="keyword">from</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="组件内部监听相应的事件，模拟组件内导航守卫"><a href="#组件内部监听相应的事件，模拟组件内导航守卫" class="headerlink" title="组件内部监听相应的事件，模拟组件内导航守卫"></a>组件内部监听相应的事件，模拟组件内导航守卫</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">// ...</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">  // ...</span><br><span class="line">  created() &#123;</span><br><span class="line">    // ! 先存储当前路由名（beforeDestroy 钩子中 this.$route 可能已经变了）</span><br><span class="line">    this._name = this.$route.name</span><br><span class="line"></span><br><span class="line">    // 这些不放在 beforeCreate 中的原因在于 beforeCreate 中还拿不到 methods 中的方法</span><br><span class="line">    // 类似 addEventlistioner 和 removeEventListioner，on 和 off 的回调函数必须是同一个</span><br><span class="line">    this.$eventbus.$off(`before$&#123;this._name&#125;Enter`, this.beforeRouteEnter)</span><br><span class="line">    this.$eventbus.$on(`before$&#123;this._name&#125;Enter`, this.beforeRouteEnter)</span><br><span class="line">    this.$eventbus.$off(`before$&#123;this._name&#125;Leave`, this.beforeRouteLeave)</span><br><span class="line">    this.$eventbus.$on(`before$&#123;this._name&#125;Leave`, this.beforeRouteLeave)</span><br><span class="line"></span><br><span class="line">    // 由于全局守卫 afterEach 会先于组件的 created 执行，导致第一次未触发</span><br><span class="line">    // `before$&#123;this.$route.name&#125;Enter` 事件，这里手动触发一下，</span><br><span class="line">    // this.$beforeRouteEnterParams 是在全局守卫 afterEach 中记录的 to 和 from</span><br><span class="line">    // ! 注意：this.beforeRouteEnter 中有依赖数据初始化的，初始化逻辑需在此之前</span><br><span class="line">    this.$eventbus.$emit(`before$&#123;this._name&#125;Enter`, this.$beforeRouteEnterParams.to, this.$beforeRouteEnterParams.from)</span><br><span class="line">    // ...</span><br><span class="line">  &#125;,</span><br><span class="line">  beforeDestroy() &#123;</span><br><span class="line">    // ! 这里不用 this.$route.name 是因为销毁前路由可能已经改变</span><br><span class="line">    this.$eventbus.$off(`before$&#123;this._name&#125;Enter`, this.beforeRouteEnter)</span><br><span class="line">    this.$eventbus.$off(`before$&#123;this._name&#125;Leave`, this.beforeRouteLeave)</span><br><span class="line">    // ...</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    // 模拟的 beforeRouteEnter</span><br><span class="line">    beforeRouteEnter(to, from) &#123;</span><br><span class="line">      // ...</span><br><span class="line">    &#125;,</span><br><span class="line">    // 模拟的 beforeRouteLeave</span><br><span class="line">    beforeRouteLeave(to, from, next) &#123;</span><br><span class="line">      // ...</span><br><span class="line">      // 记得执行 next()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  // ...</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/vue/" rel="tag"># vue</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/26/vue-lazy-load-view/" rel="prev" title="vue 路由懒加载处理加载状态">
+                  <i class="fa fa-angle-left"></i> vue 路由懒加载处理加载状态
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/08/27/vue-check-routeame-and-pagename/" rel="next" title="检查路由名与页面名是否一致">
+                  检查路由名与页面名是否一致 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2019 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">shawchen08</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
